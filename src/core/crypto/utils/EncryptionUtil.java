@@ -5,7 +5,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptionUtil {
-	public static String calculateHMAC(String secret, String username, long timestamp) {
+	public static String calculateHMAC(String secret, String username, String timestamp) {
         // Concatenate the username and timestamp (epoch seconds)
         String data = username + timestamp;
  
