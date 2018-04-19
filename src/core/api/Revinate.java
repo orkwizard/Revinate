@@ -6,8 +6,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoField;
 import java.util.HashMap;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import core.Net;
 import core.crypto.utils.EncryptionUtil;
+import pojo.Hotel;
+import pojo.arrays.Hotels;
 
 public class Revinate {
 
@@ -26,11 +31,13 @@ public class Revinate {
 	String timestamp;
 	HashMap<String,String> params;
 	
+	Gson gson;
+	
 	
 	public Revinate() {
 		super();		
+		gson = new Gson();
 	}
-
 
 	public String getTimestamp() {
 		return ""+Instant.now().getEpochSecond();
@@ -64,14 +71,24 @@ public class Revinate {
 	}
 	
 
-	public String getHotelSets() throws Exception {
+	public Hotel getHotels() {
+		Hotel hotel = new Hotel();
 		String ep = endpoint +"/hotels";	
 		generateParams();
 		
-		
-		
-		System.out.println(Net.get(ep,params));
-		return null;
+		String json;
+		try {
+			json = Net.get(ep,params);
+			System.out.println(json);
+			
+			
+			hotel = gson.fromJson(json, Hotel.class);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hotel;
 	}
 	
 	
@@ -83,15 +100,8 @@ public class Revinate {
 
 	public static void main(String[] args) {
 		Revinate revinate = new Revinate();
-		try {
-			System.out.println(revinate.getHotelSets());
-			System.out.println(revinate.toString());
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		Hotel hotels = revinate.getHotels();
+		System.out.println(hotels.toString());
 		
 	}
 	
